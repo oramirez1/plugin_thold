@@ -370,7 +370,39 @@ function thold_config_settings () {
 			'size' => 3,
 			'max_length' => 3,
 			'default' => 20
-			)
-		);
+			),
+        'thold_sms_header' => array(
+            'friendly_name' => 'SMS Options',
+            'method' => 'spacer',
+            ),
+        'thold_sms_api_key' => array(
+            'friendly_name' => 'API Key',
+            'description' => 'Nexmo API Key.',
+            'method' => 'textbox',
+            'size' => 80,
+            'max_length' => 255,
+            ),
+        'thold_sms_api_secret' => array(
+            'friendly_name' => 'API Secret',
+            'description' => 'Nexmo API Key Secret.',
+            'method' => 'textbox',
+            'size' => 80,
+            'max_length' => 255,
+            ),
+        'thold_sms_from' => array(
+            'friendly_name' => 'SMS From:',
+            'description' => 'Provider Phone Number',
+            'method' => 'textbox',
+            'size' => 80,
+            'max_length' => 255,
+            ),
+        'thold_sms_to' => array(
+            'friendly_name' => 'SMS To:',
+            'description' => 'Phone Numbers that will be contacted by the Provider.',
+            'method' => 'textbox',
+            'size' => 80,
+            'max_length' => 255,
+            )
+        );
 }
 

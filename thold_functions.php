@@ -1391,6 +1391,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '') {
 					thold_mail($alert_emails, '', $subject, $msg, $file_array);
+                    thold_sms($subject);
 				}
 
 				thold_log(array(
@@ -1437,6 +1438,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($warning_emails) != '') {
 					thold_mail($warning_emails, '', $subject, $warn_msg, $file_array);
+                    thold_sms($subject);
 				}
 
 				thold_log(array(
@@ -1455,6 +1457,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '') {
 					thold_mail($alert_emails, '', $subject, $warn_msg, $file_array);
+                    thold_sms($subject);
 				}
 
 				thold_log(array(
@@ -1493,6 +1496,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 					if (trim($warning_emails) != '' && $item['restored_alert'] != 'on') {
 						thold_mail($warning_emails, '', $subject, $warn_msg, $file_array);
+                        thold_sms($subject);
 					}
 
 					thold_log(array(
@@ -1513,6 +1517,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 					if (trim($alert_emails) != '' && $item['restored_alert'] != 'on') {
 						thold_mail($alert_emails, '', $subject, $msg, $file_array);
+                        thold_sms($subject);
 					}
 
 					thold_log(array(
@@ -1558,6 +1563,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 					if (trim($alert_emails) != '') {
 						thold_mail($alert_emails, '', $subject, $msg, $file_array);
+                        thold_sms($subject);
 					}
 
 					thold_log(array(
@@ -1599,6 +1605,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '') {
 					thold_mail($alert_emails, '', $subject, $msg, $file_array);
+                    thold_sms($subject);
 				}
 
 				thold_log(array(
@@ -1700,6 +1707,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '') {
 					thold_mail($alert_emails, '', $subject, $msg, $file_array);
+                    thold_sms($subject);
 				}
 
 				thold_log(array(
@@ -1766,6 +1774,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '') {
 					thold_mail($warning_emails, '', $subject, $warn_msg, $file_array);
+                    thold_sms($subject);
 				}
 
 				thold_log(array(
@@ -1824,6 +1833,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($warning_emails) != '' && $item['restored_alert'] != 'on') {
 					thold_mail($warning_emails, '', $subject, $msg, $file_array);
+                    thold_sms($subject);
 				}
 
 				thold_log(array(
@@ -1850,6 +1860,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '' && $item['restored_alert'] != 'on') {
 					thold_mail($alert_emails, '', $subject, $msg, $file_array);
+                    thold_sms($subject);
 				}
 
 				thold_log(array(
@@ -2846,6 +2857,26 @@ function thold_mail($to, $from, $subject, $message, $filename, $headers = '') {
 	}
 
 	return '';
+}
+
+function thold_sms($api_key, $api_secret, $to, $from, $subject ) {
+//function thold_sms($message) {
+    thold_debug('Preparing SMS Packet');
+    $url = 'https://rest.nexmo.com/sms/json?' . http_build_query(
+            [
+                'api_key' =>  '313ceb46',
+                'api_secret' => '558d8815a75a36bd',
+                'to' => '14165539816',
+                'from' => '16102738127',
+                'text' => $message
+            ]
+        );
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    thold_debug("Message response" . $response);
+    /*echo $response;*/
 }
 
 function thold_template_update_threshold ($id, $template) {

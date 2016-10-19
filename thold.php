@@ -712,7 +712,28 @@ $form_array = array(
 				'textarea_cols' => 50,
 				'description' => 'You may specify here extra Emails to receive warnings for this data source (comma separated)',
 				'value' => isset($thold_item_data['notify_warning_extra']) ? $thold_item_data['notify_warning_extra'] : ''
-			)
+			),
+			'sms_header' => array(
+				'friendly_name' => 'SMS Settings',
+				'method' => 'spacer',
+			),
+			'notify_sms_extra' => array(
+				'friendly_name' => 'Alert Emails',
+				'method' => 'textarea',
+				'textarea_rows' => 3,
+				'textarea_cols' => 50,
+				'description' => 'You may specify here extra Emails to receive alerts for this data source (comma separated)',
+				'value' => isset($thold_item_data['notify_sms_extra']) ? $thold_item_data['notify_sms_extra'] : ''
+			),
+			'notify_sms_warning_extra' => array(
+				'friendly_name' => 'Warning Emails',
+				'method' => 'textarea',
+				'textarea_rows' => 3,
+				'textarea_cols' => 50,
+				'description' => 'You may specify here extra Emails to receive warnings for this data source (comma separated)',
+				'value' => isset($thold_item_data['notify_sms_warning_extra']) ? $thold_item_data['notify_sms_warning_extra'] : ''
+			),
+
 		);
 
 		$form_array += $extra;
@@ -729,6 +750,14 @@ $form_array = array(
 			'notify_warning_extra' => array(
 				'method' => 'hidden',
 				'value' => isset($thold_item_data['notify_warning_extra']) ? $thold_item_data['notify_warning_extra'] : ''
+			),
+			'notify_sms_extra' => array(
+				'method' => 'hidden',
+				'value' => isset($thold_item_data['notify_sms_extra']) ? $thold_item_data['notify_sms_extra'] : ''
+			),
+			'notify_sms_warning_extra' => array(
+				'method' => 'hidden',
+				'value' => isset($thold_item_data['notify_sms_warning_extra']) ? $thold_item_data['notify_sms_warning_extra'] : ''
 			)
 		);
 
@@ -777,7 +806,9 @@ unset($template_data_rrds);
 		_f.thold_warning_fail_trigger.disabled = status;
 		_f.repeat_alert.disabled = status;
 		_f.notify_extra.disabled = status;
+		_f.notify_sms_extra.disabled = status;
 		_f.notify_warning_extra.disabled = status;
+		_f.notify_sms_warning_extra.disabled = status;
 		_f.notify_warning.disabled = status;
 		_f.notify_alert.disabled = status;
 		_f.cdef.disabled = status;
