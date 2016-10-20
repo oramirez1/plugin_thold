@@ -718,19 +718,19 @@ $form_array = array(
 				'method' => 'spacer',
 			),
 			'notify_sms_extra' => array(
-				'friendly_name' => 'Alert Emails',
+				'friendly_name' => 'Alert SMS',
 				'method' => 'textarea',
 				'textarea_rows' => 3,
 				'textarea_cols' => 50,
-				'description' => 'You may specify here extra Emails to receive alerts for this data source (comma separated)',
+				'description' => 'You may specify here extra SMS to receive alerts for this data source (comma separated)',
 				'value' => isset($thold_item_data['notify_sms_extra']) ? $thold_item_data['notify_sms_extra'] : ''
 			),
 			'notify_sms_warning_extra' => array(
-				'friendly_name' => 'Warning Emails',
+				'friendly_name' => 'Warning SMS',
 				'method' => 'textarea',
 				'textarea_rows' => 3,
 				'textarea_cols' => 50,
-				'description' => 'You may specify here extra Emails to receive warnings for this data source (comma separated)',
+				'description' => 'You may specify here extra SMS to receive warnings for this data source (comma separated)',
 				'value' => isset($thold_item_data['notify_sms_warning_extra']) ? $thold_item_data['notify_sms_warning_extra'] : ''
 			),
 

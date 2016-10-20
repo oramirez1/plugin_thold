@@ -438,6 +438,8 @@ function template_save_edit() {
 
 	$save['notify_extra'] = $_POST['notify_extra'];
 	$save['notify_warning_extra'] = $_POST['notify_warning_extra'];
+	$save['notify_sms_extra'] = $_POST['notify_sms_extra'];
+	$save['notify_sms_warning_extra'] = $_POST['notify_sms_warning_extra'];
 	$save['notify_warning'] = $_POST['notify_warning'];
 	$save['notify_alert'] = $_POST['notify_alert'];
 	$save['cdef'] = $_POST['cdef'];
@@ -937,6 +939,26 @@ function template_edit() {
 				'textarea_cols' => 50,
 				'description' => 'You may specify here extra Emails to receive warnings for this data source (comma separated)',
 				'value' => isset($thold_item_data['notify_warning_extra']) ? $thold_item_data['notify_warning_extra'] : ''
+			),
+			'sms_header' => array(
+				'friendly_name' => 'SMS Settings',
+				'method' => 'spacer',
+			),
+			'notify_sms_extra' => array(
+				'friendly_name' => 'Alert SMS',
+				'method' => 'textarea',
+				'textarea_rows' => 3,
+				'textarea_cols' => 50,
+				'description' => 'You may specify here extra SMS to receive alerts for this data source (comma separated)',
+				'value' => isset($thold_item_data['notify_sms_extra']) ? $thold_item_data['notify_sms_extra'] : ''
+			),
+			'notify_sms_warning_extra' => array(
+				'friendly_name' => 'Warning SMS',
+				'method' => 'textarea',
+				'textarea_rows' => 3,
+				'textarea_cols' => 50,
+				'description' => 'You may specify here extra SMS to receive warnings for this data source (comma separated)',
+				'value' => isset($thold_item_data['notify_sms_warning_extra']) ? $thold_item_data['notify_sms_warning_extra'] : ''
 			)
 		);
 
@@ -954,6 +976,14 @@ function template_edit() {
 			'notify_warning_extra' => array(
 				'method' => 'hidden',
 				'value' => isset($thold_item_data['notify_warning_extra']) ? $thold_item_data['notify_warning_extra'] : ''
+			),
+			'notify_sms_extra' => array(
+				'method' => 'hidden',
+				'value' => isset($thold_item_data['notify_sms_extra']) ? $thold_item_data['notify_sms_extra'] : ''
+			),
+			'notify_sms_warning_extra' => array(
+				'method' => 'hidden',
+				'value' => isset($thold_item_data['notify_sms_warning_extra']) ? $thold_item_data['notify_sms_warning_extra'] : ''
 			)
 		);
 
