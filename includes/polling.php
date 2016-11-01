@@ -163,6 +163,7 @@ function thold_update_host_status () {
 	}
 
 	$alert_email = read_config_option('alert_email');
+    $alert_sms = read_config_option('thold_sms_to');
 	$ping_failure_count = read_config_option('ping_failure_count');
 
 	// Lets find hosts that were down, but are now back up
@@ -294,6 +295,12 @@ function thold_update_host_status () {
 						cacti_log('THOLD: Did not send a Host Recovering Email, disabled per host setting : ' . $host['description'] . ' !', true, 'POLLER');
 					} elseif ($alert_email != '') {
 						thold_mail($alert_email, '', $subject, $msg, '');
+                        if ($alert_sms == '' ){
+                            cacti_log('THOLD: Did not send SMS, it is not configured properly', true, 'POLLER');
+                        }
+                        else {
+                            thold_sms('', $subject);
+                        }
 					}
 				}
 			}

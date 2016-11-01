@@ -1391,7 +1391,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '') {
 					thold_mail($alert_emails, '', $subject, $msg, $file_array);
-                    thold_sms($subject);
+                    thold_sms('',$subject);
 				}
 
 				thold_log(array(
@@ -1438,7 +1438,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($warning_emails) != '') {
 					thold_mail($warning_emails, '', $subject, $warn_msg, $file_array);
-                    thold_sms($subject);
+                    thold_sms('', $subject);
 				}
 
 				thold_log(array(
@@ -1457,7 +1457,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '') {
 					thold_mail($alert_emails, '', $subject, $warn_msg, $file_array);
-                    thold_sms($subject);
+                    thold_sms('', $subject);
 				}
 
 				thold_log(array(
@@ -1496,7 +1496,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 					if (trim($warning_emails) != '' && $item['restored_alert'] != 'on') {
 						thold_mail($warning_emails, '', $subject, $warn_msg, $file_array);
-                        thold_sms($subject);
+                        thold_sms('', $subject);
 					}
 
 					thold_log(array(
@@ -1517,7 +1517,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 					if (trim($alert_emails) != '' && $item['restored_alert'] != 'on') {
 						thold_mail($alert_emails, '', $subject, $msg, $file_array);
-                        thold_sms($subject);
+                        thold_sms('', $subject);
 					}
 
 					thold_log(array(
@@ -1563,7 +1563,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 					if (trim($alert_emails) != '') {
 						thold_mail($alert_emails, '', $subject, $msg, $file_array);
-                        thold_sms($subject);
+                        thold_sms('', $subject);
 					}
 
 					thold_log(array(
@@ -1605,7 +1605,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '') {
 					thold_mail($alert_emails, '', $subject, $msg, $file_array);
-                    thold_sms($subject);
+                    thold_sms('', $subject);
 				}
 
 				thold_log(array(
@@ -1707,7 +1707,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '') {
 					thold_mail($alert_emails, '', $subject, $msg, $file_array);
-                    thold_sms($subject);
+                    thold_sms('', $subject);
 				}
 
 				thold_log(array(
@@ -1774,7 +1774,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '') {
 					thold_mail($warning_emails, '', $subject, $warn_msg, $file_array);
-                    thold_sms($subject);
+                    thold_sms('', $subject);
 				}
 
 				thold_log(array(
@@ -1833,7 +1833,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($warning_emails) != '' && $item['restored_alert'] != 'on') {
 					thold_mail($warning_emails, '', $subject, $msg, $file_array);
-                    thold_sms($subject);
+                    thold_sms('', $subject);
 				}
 
 				thold_log(array(
@@ -1860,7 +1860,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '' && $item['restored_alert'] != 'on') {
 					thold_mail($alert_emails, '', $subject, $msg, $file_array);
-                    thold_sms($subject);
+                    thold_sms('', $subject);
 				}
 
 				thold_log(array(
@@ -2540,6 +2540,8 @@ function save_thold() {
 	$save['repeat_alert'] = (trim($_POST['repeat_alert'])) == '' ? '' : $_POST['repeat_alert'];
 	$save['notify_extra'] = (trim($_POST['notify_extra'])) == '' ? '' : $_POST['notify_extra'];
 	$save['notify_warning_extra'] = (trim($_POST['notify_warning_extra'])) == '' ? '' : $_POST['notify_warning_extra'];
+    $save['notify_sms_extra'] = (trim($_POST['notify_sms_extra'])) == '' ? '' : $_POST['notify_sms_extra'];
+    $save['notify_sms_warning_extra'] = (trim($_POST['notify_sms_warning_extra'])) == '' ? '' : $_POST['notify_sms_warning_extra'];
 	$save['notify_warning'] = $_POST['notify_warning'];
 	$save['notify_alert']   = $_POST['notify_alert'];
 	$save['cdef']           = (trim($_POST['cdef'])) == '' ? '' : $_POST['cdef'];
@@ -2859,23 +2861,31 @@ function thold_mail($to, $from, $subject, $message, $filename, $headers = '') {
 	return '';
 }
 
-function thold_sms($api_key, $api_secret, $to, $from, $subject ) {
-//function thold_sms($message) {
+function thold_sms($to, $message) {
     thold_debug('Preparing SMS Packet');
-    $url = 'https://rest.nexmo.com/sms/json?' . http_build_query(
-            [
-                'api_key' =>  '313ceb46',
-                'api_secret' => '558d8815a75a36bd',
-                'to' => '14165539816',
-                'from' => '16102738127',
-                'text' => $message
-            ]
-        );
+    $api_key = read_config_option('thold_sms_api_key');
+    $api_secret = read_config_option('thold_sms_api_secret');
+    $from = read_config_option('thold_sms_from');
 
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($ch);
-    thold_debug("Message response" . $response);
+    if ($to == '') {
+        $to = read_config_option('thold_sms_to');
+        $to = explode(',', $to);
+    }
+
+    foreach($to as $t) {
+        $url = 'https://rest.nexmo.com/sms/json?' . http_build_query(
+                [
+                    'api_key' => $api_key,
+                    'api_secret' => $api_secret,
+                    'to' => trim($t),
+                    'from' => $from,
+                    'text' => $message
+                ]);
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        thold_debug("Message response: " . $response . "to: " . $t);
+    }
     /*echo $response;*/
 }
 
