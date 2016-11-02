@@ -2878,25 +2878,26 @@ function thold_sms($to, $message) {
     $from = read_config_option('thold_sms_from');
 
     if ($to == '') {
-        $to = read_config_option('thold_sms_to');
+        thold_cacti_log("There is not phone number configured in Threshold SMS Settings");
+    }
+    else {
         $to = explode(',', $to);
-    }
 
-    foreach($to as $t) {
-        $url = 'https://rest.nexmo.com/sms/json?' . http_build_query(
-                [
-                    'api_key' => $api_key,
-                    'api_secret' => $api_secret,
-                    'to' => trim($t),
-                    'from' => $from,
-                    'text' => $message
-                ]);
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-        thold_debug("Message response: " . $response . "to: " . $t);
-    }
-    /*echo $response;*/
+        foreach ($to as $t) {
+            $url = 'https://rest.nexmo.com/sms/json?' . http_build_query(
+                    [
+                        'api_key' => $api_key,
+                        'api_secret' => $api_secret,
+                        'to' => trim($t),
+                        'from' => $from,
+                        'text' => $message
+                    ]);
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($ch);
+            thold_debug("Message response: " . $response . "to: " . $t);
+        }
+    }/*echo $response;*/
 }
 
 function thold_template_update_threshold ($id, $template) {
