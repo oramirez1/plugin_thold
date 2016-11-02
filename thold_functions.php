@@ -1257,6 +1257,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 	$thold_send_text_only = read_config_option('thold_send_text_only');
 	$thold_alert_text = read_config_option('thold_alert_text');
 	$thold_warning_text = read_config_option('thold_warning_text');
+    $thold_sms = read_config_option('thold_sms_to');
 
 	/* remove this after adding an option for it */
 	$thold_show_datasource = true;
@@ -1282,6 +1283,8 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 		AND plugin_thold_threshold_contact.thold_id = ' . $item['id']);
 
 	$alert_emails = '';
+    $alert_sms = '';
+
 	if (read_config_option('thold_disable_legacy') != 'on') {
 		$alert_emails = array();
 		if (count($rows)) {
@@ -1296,16 +1299,23 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 		} else {
 			$alert_emails = $item['notify_extra'];
 		}
+
+		$alert_sms = $item['notify_sms_extra'];
 	}
 
 	$alert_emails .= (strlen($alert_emails) ? ",":"") . get_thold_notification_emails($item['notify_alert']);
+    $alert_sms  .= (strlen($alert_sms) ? ",":"") . $thold_sms;
 
 	$warning_emails = '';
+    $warning_sms = '';
+
 	if (read_config_option('thold_disable_legacy') != 'on') {
 		$warning_emails = $item['notify_warning_extra'];
+        $warning_sms = $item['notify_sms_warning_extra'];
 	}
 
 	$warning_emails .= (strlen($warning_emails) ? ",":"") . get_thold_notification_emails($item['notify_warning']);
+    $warning_sms .= (strlen($warning_sms) ? ",":"") . $thold_sms;
 
 	$types = array('High/Low', 'Baseline Deviation', 'Time Based');
 
@@ -1391,7 +1401,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '') {
 					thold_mail($alert_emails, '', $subject, $msg, $file_array);
-                    thold_sms('',$subject);
+                    thold_sms($alert_sms, $subject);
 				}
 
 				thold_log(array(
@@ -1438,7 +1448,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($warning_emails) != '') {
 					thold_mail($warning_emails, '', $subject, $warn_msg, $file_array);
-                    thold_sms('', $subject);
+                    thold_sms($warning_sms, $subject);
 				}
 
 				thold_log(array(
@@ -1457,7 +1467,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '') {
 					thold_mail($alert_emails, '', $subject, $warn_msg, $file_array);
-                    thold_sms('', $subject);
+                    thold_sms($alert_sms, $subject);
 				}
 
 				thold_log(array(
@@ -1496,7 +1506,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 					if (trim($warning_emails) != '' && $item['restored_alert'] != 'on') {
 						thold_mail($warning_emails, '', $subject, $warn_msg, $file_array);
-                        thold_sms('', $subject);
+                        thold_sms($warning_sms, $subject);
 					}
 
 					thold_log(array(
@@ -1517,7 +1527,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 					if (trim($alert_emails) != '' && $item['restored_alert'] != 'on') {
 						thold_mail($alert_emails, '', $subject, $msg, $file_array);
-                        thold_sms('', $subject);
+                        thold_sms($alert_sms, $subject);
 					}
 
 					thold_log(array(
@@ -1563,7 +1573,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 					if (trim($alert_emails) != '') {
 						thold_mail($alert_emails, '', $subject, $msg, $file_array);
-                        thold_sms('', $subject);
+                        thold_sms($alert_sms, $subject);
 					}
 
 					thold_log(array(
@@ -1605,7 +1615,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '') {
 					thold_mail($alert_emails, '', $subject, $msg, $file_array);
-                    thold_sms('', $subject);
+                    thold_sms($alert_sms, $subject);
 				}
 
 				thold_log(array(
@@ -1707,7 +1717,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '') {
 					thold_mail($alert_emails, '', $subject, $msg, $file_array);
-                    thold_sms('', $subject);
+                    thold_sms($alert_sms, $subject);
 				}
 
 				thold_log(array(
@@ -1774,7 +1784,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '') {
 					thold_mail($warning_emails, '', $subject, $warn_msg, $file_array);
-                    thold_sms('', $subject);
+                    thold_sms($warning_sms, $subject);
 				}
 
 				thold_log(array(
@@ -1833,7 +1843,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($warning_emails) != '' && $item['restored_alert'] != 'on') {
 					thold_mail($warning_emails, '', $subject, $msg, $file_array);
-                    thold_sms('', $subject);
+                    thold_sms($warning_sms, $subject);
 				}
 
 				thold_log(array(
@@ -1860,7 +1870,7 @@ function thold_check_threshold ($rra_id, $data_id, $name, $currentval, $cdef) {
 
 				if (trim($alert_emails) != '' && $item['restored_alert'] != 'on') {
 					thold_mail($alert_emails, '', $subject, $msg, $file_array);
-                    thold_sms('', $subject);
+                    thold_sms($alert_sms, $subject);
 				}
 
 				thold_log(array(
