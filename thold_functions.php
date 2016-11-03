@@ -2877,12 +2877,13 @@ function thold_sms($to, $message) {
     $api_secret = read_config_option('thold_sms_api_secret');
     $from = read_config_option('thold_sms_from');
 
-    if ($to == '') {
-        thold_cacti_log("There is not phone number configured in Threshold SMS Settings");
+    if (($to == '') || ($api_key == '') || ($api_secret == '') || ($from == '')) {
+        thold_cacti_log("Threshold SMS Settings is not configured properly");
+        print 'Threshold SMS Settings is not configured properly';
     }
     else {
-        $to = explode(',', $to);
 
+        $to = explode(',', $to);
         foreach ($to as $t) {
             $url = 'https://rest.nexmo.com/sms/json?' . http_build_query(
                     [
@@ -2898,6 +2899,7 @@ function thold_sms($to, $message) {
             thold_debug("Message response: " . $response . "to: " . $t);
         }
     }/*echo $response;*/
+    return '';
 }
 
 function thold_template_update_threshold ($id, $template) {

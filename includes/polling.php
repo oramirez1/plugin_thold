@@ -295,11 +295,11 @@ function thold_update_host_status () {
 						cacti_log('THOLD: Did not send a Host Recovering Email, disabled per host setting : ' . $host['description'] . ' !', true, 'POLLER');
 					} elseif ($alert_email != '') {
 						thold_mail($alert_email, '', $subject, $msg, '');
-                        if ($alert_sms == '' ){
+                        if ($alert_sms == '') {
                             cacti_log('THOLD: Did not send SMS, it is not configured properly', true, 'POLLER');
                         }
                         else {
-                            thold_sms('', $subject);
+                            thold_sms($alert_sms, $subject);
                         }
 					}
 				}
@@ -390,6 +390,12 @@ function thold_update_host_status () {
 				cacti_log('THOLD: Did not send a Host Down Email, disabled per host setting : ' . $host['description'] . ' !', true, 'POLLER');
 			} elseif ($alert_email != '') {
 				thold_mail($alert_email, '', $subject, $msg, '');
+                if ($alert_sms == '') {
+                    cacti_log('THOLD: Did not send SMS, it is not configured properly', true, 'POLLER');
+                }
+                else {
+                    thold_sms($alert_sms, $subject);
+                }
 			}
 		}
 	}
