@@ -2871,6 +2871,47 @@ function thold_mail($to, $from, $subject, $message, $filename, $headers = '') {
 	return '';
 }
 
+
+/* Creates URL based on SMS Provider. */
+function create_sms_url($to, $message) {
+    $api_key = read_config_option('thold_sms_api_key');
+    $api_secret = read_config_option('thold_sms_api_secret');
+    $from = read_config_option('thold_sms_from');
+    $sms_provider = read_config_option('thold_sms_provider');
+    $action = 'sendsms';
+    $url = '';
+
+    switch($sms_provider){
+        //Nexmo
+        case 1:
+            $url = 'https://rest.nexmo.com/sms/json?' . http_build_query(
+                    [
+                        'api_key' => $api_key,
+                        'api_secret' => $api_secret,
+                        'to' => trim($to),
+                        'from' => $from,
+                        'text' => $message
+                    ]);
+            break;
+        //SMS Global
+        case 2:
+            $url = 'https://www.smsglobal.com/http-api.php?' . http_build_query(
+                    [
+                        'action' => $action,
+                        'user' => $api_key,
+                        'password' => $api_secret,
+                        'to' => trim($to),
+                        'from' => $from,
+                        'text' => $message
+                    ]);
+
+            break;
+    }
+
+    return $url;
+}
+
+/* Sends SMS to specific phone numbers. */
 function thold_sms($to, $message) {
     thold_debug('Preparing SMS Packet');
     $api_key = read_config_option('thold_sms_api_key');
@@ -2882,17 +2923,9 @@ function thold_sms($to, $message) {
         print 'Threshold SMS Settings is not configured properly';
     }
     else {
-
         $to = explode(',', $to);
         foreach ($to as $t) {
-            $url = 'https://rest.nexmo.com/sms/json?' . http_build_query(
-                    [
-                        'api_key' => $api_key,
-                        'api_secret' => $api_secret,
-                        'to' => trim($t),
-                        'from' => $from,
-                        'text' => $message
-                    ]);
+            $url = create_sms_url($t, $message);
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $response = curl_exec($ch);
