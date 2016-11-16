@@ -137,6 +137,17 @@ function thold_config_settings () {
 		$default_facility = LOG_USER;
 	}
 
+    $javascript = '<script type="text/javascript">
+<!--
+   function smstest() {
+      w = 420;
+      h = 350;
+      sms = window.open("plugins/thold/sms-test.php", "SMSTest", "width=" + w + ",height=" + h + ",resizable=0,status=0");
+      sms.moveTo((screen.width - w) /2 , (screen.height - h) /2 );
+   }
+//-->
+</script>';
+
 	$tabs['alerts'] = 'Thresholds';
 	$settings['alerts'] = array(
 		'general_header' => array(
@@ -374,6 +385,9 @@ function thold_config_settings () {
         'thold_sms_header' => array(
             'friendly_name' => 'SMS Options',
             'method' => 'spacer',
+            "friendly_name" => "\n$javascript\n<table width='99%' cellspacing=0 cellpadding=0 align=left><tr><td class='textSubHeaderDark'>SMS Options</td><td align=right class='textSubHeaderDark'><a href='javascript:smstest();' class='textSubHeaderDark'><font color=white>Send an SMS Test</font></a></td></tr></table>",
+            "method" => "spacer",
+
             ),
         'thold_sms_provider' => array(
             'friendly_name' => 'SMS Provider',
